@@ -1,0 +1,37 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.TH LED 8 "December 1, 2011"
+.SH NAME
+led \- tool to control leds
+.SH SYNOPSIS
+.B led
+.RI [ options ] " command " [ value ]
+.SH OPTIONS
+.TP
+.B \-\-version
+Show the version of led.
+.SH COMMANDS
+.TP
+.B help
+Show led's built-in help text.
+.TP
+.BI brightness  " led [value]"
+Get led brightness or set it to the specified value
+.TP
+.BI max_brightness " led"
+Get led maximum brightness.
+.TP
+.BI list " [led]"
+List the current state of all available led, or just
+for this led.
+.TP
+.BI trigger " led [trigger]"
+Get led trigger or set it to the specified TRIGGER.
+.TP
+.BI triggers " led"
+Get led trigger list for this led.
+.TP
+.SH AUTHORS
+led was originally written by Corentin Chary <corentin.chary@gmail.com>.
+.PP
+This manual page was written by Corentin Chary <corentin.chary@gmail.com>.
+

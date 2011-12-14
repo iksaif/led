@@ -1,0 +1,88 @@
+#!/bin/sh
+
+set -e
+
+version=0.1
+leds=/sys/class/leds/
+
+usage() {
+   echo "Usage:  led [options] command"
+   echo "Options:"
+   echo "  --version       show version ($version)"
+   echo "Commands:"
+   echo "   help"
+   echo "   list [LED]"
+   echo "   triggers LED"
+   echo "   trigger LED [TRIGGER]"
+   echo "   brightness LED [IDENTIFIER]"
+   echo "   max_brightness LED [IDENTIFIER]"
+}
+
+led_brightness() {
+   local led=$1
+   local brightness=$2
+
+   if [ -z "$brightness" ]; then
+       cat "$leds/$led/brightness"
+   else
+       echo "$brightness" > "$leds/$led/brightness"
+   fi
+}
+
+led_max_brightness() {
+   local led=$1
+
+   cat "$leds/$led/max_brightness"
+}
+
+led_triggers() {
+   local led=$1
+   local trigger=$2
+
+   if [ -z "$trigger" ]; then
+       cat "$leds/$led/trigger"
+   else
+       echo "$trigger" > "$leds/$led/trigger"
+   fi
+}
+
+led_trigger() {
+    led_triggers $@ | cut -d[ -f2 | cut -d] -f1
+}
+
+led_list() {
+    for i in $leds/*; do
+	led=$(basename $i)
+	echo "$led:"
+	echo "	brightness: "$(led_brightness "$led")"/"$(led_max_brightness "$led")
+	echo "	trigger: "$(led_trigger "$led")
+    done
+
+    return 0
+}
+
+main() {
+   local action=$1
+   local led=$2
+   local value=$3
+
+   if [ "$action" = "brightness" -a -n "$led" ]; then
+       led_brightness "$led" "$value"
+   elif [ "$action" = "max_brightness" -a -n "$led"  ]; then
+       led_max_brightness "$led"
+   elif [ "$action" = "trigger" -a -n "$led"  ]; then
+       led_trigger "$led" "$value"
+   elif [ "$action" = "triggers" -a -n "$led"  ]; then
+       led_triggers "$led"
+   elif [ "$action" = "list" ]; then
+       led_list "$led"
+   elif [ "$action" = "--version" ]; then
+       echo "led $version"
+   else
+       usage
+       exit 1
+   fi
+}
+
+main $@
+exit 0

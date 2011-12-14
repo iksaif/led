@@ -1,0 +1,8 @@
+
+This is 'led', a tool to use /sys/class/led.
+
+'led' is currently maintained at http://github.com/iksaif/led
+
+(if anyone have the time to do it, try to re-write that in C :) )
+
+Please send all patches to Corentin Chary <corentin.chary@gmail.com>.
